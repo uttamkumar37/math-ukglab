@@ -1,0 +1,21 @@
+{
+  "name": "Math by UKG Lab",
+  "short_name": "Math",
+  "description": "CBSE Mathematics learning platform for Classes 9, 10, 11 and 12.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080d16",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

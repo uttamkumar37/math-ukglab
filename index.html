@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CBSE Class 9-12 Maths | Math by UKG Lab</title>
+    <meta
+      name="description"
+      content="Learn CBSE Mathematics for Classes 9, 10, 11 and 12 through clear concepts, worked examples, practice and step-by-step problem solving."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="canonical" href="https://math.ukglab.com/" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CBSE Class 9-12 Maths | Math by UKG Lab" />
+    <meta
+      property="og:description"
+      content="Learn CBSE Mathematics for Classes 9, 10, 11 and 12 through clear concepts, worked examples, practice and step-by-step problem solving."
+    />
+    <meta property="og:url" content="https://math.ukglab.com/" />
+    <meta property="og:site_name" content="Math by UKG Lab" />
+    <meta property="og:image" content="https://math.ukglab.com/og-image.svg" />
+    <meta property="og:image:alt" content="Math by UKG Lab - Understand Math. Don't Memorize It." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@uttamkumar37" />
+    <meta name="twitter:title" content="CBSE Class 9-12 Maths | Math by UKG Lab" />
+    <meta
+      name="twitter:description"
+      content="Learn CBSE Mathematics for Classes 9, 10, 11 and 12 through clear concepts, worked examples, practice and step-by-step problem solving."
+    />
+    <meta name="twitter:image" content="https://math.ukglab.com/og-image.svg" />
+    <script>
+      (function () {
+        var theme = localStorage.getItem("ukglab-theme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var isDark = theme === "dark" || (theme !== "light" && prefersDark);
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) history.replaceState(null, "", redirect);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

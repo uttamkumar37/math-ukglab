@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Math by UKG Lab">
+  <rect width="180" height="180" rx="36" fill="#080d16"/>
+  <path d="M28 120C50 56 72 56 94 120S138 184 160 120" fill="none" stroke="#14b8a6" stroke-width="12" stroke-linecap="round"/>
+  <text x="48" y="98" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="900">M</text>
+  <circle cx="132" cy="50" r="14" fill="#f97316"/>
+</svg>
