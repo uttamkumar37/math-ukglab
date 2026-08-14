@@ -27,7 +27,19 @@ const routeMetadata = {
     title: "Real Numbers - CBSE Class 10 Maths | UKG Lab",
     description: "Study Real Numbers for CBSE Class 10 with Euclidean division, practice and revision architecture.",
   },
+  "/class-10/number-systems": {
+    title: "Number Systems - CBSE Class 10 Maths | UKG Lab",
+    description: "Study Class 10 number systems, real numbers and divisibility through the Math by UKG Lab hierarchy.",
+  },
+  "/class-10/number-systems/real-numbers": {
+    title: "Real Numbers - CBSE Class 10 Maths | UKG Lab",
+    description: "Study Real Numbers through topics, concepts, practice hints and step-by-step solutions.",
+  },
   "/class-10/real-numbers/euclidean-division-lemma": {
+    title: "Euclidean Division Lemma - Class 10 Maths | UKG Lab",
+    description: "Understand the Euclidean Division Lemma with explanation, worked example, visual and practice flow.",
+  },
+  "/class-10/number-systems/real-numbers/euclidean-division-lemma": {
     title: "Euclidean Division Lemma - Class 10 Maths | UKG Lab",
     description: "Understand the Euclidean Division Lemma with explanation, worked example, visual and practice flow.",
   },
@@ -43,9 +55,25 @@ const routeMetadata = {
     title: "Quadratic Equations - CBSE Class 10 Maths | UKG Lab",
     description: "Study Class 10 Quadratic Equations with lessons, formulas and chapter structure.",
   },
+  "/class-10/algebra": {
+    title: "Algebra - CBSE Class 10 Maths | UKG Lab",
+    description: "Study Class 10 Algebra through official chapters mapped into a clear learning hierarchy.",
+  },
+  "/class-10/algebra/quadratic-equations": {
+    title: "Quadratic Equations - CBSE Class 10 Maths | UKG Lab",
+    description: "Study Class 10 Quadratic Equations with topics, concepts, examples, practice hints and solutions.",
+  },
   "/class-10/quadratic-equations/factorising-quadratics": {
     title: "Factorising Quadratic Equations - Class 10 Maths | UKG Lab",
     description: "Learn factorisation of quadratic equations with worked examples and practice-ready structure.",
+  },
+  "/class-10/algebra/quadratic-equations/quadratic-formula": {
+    title: "Quadratic Formula - Class 10 Maths | UKG Lab",
+    description: "Understand the quadratic formula through concept-first learning, example, practice, hints, approach and solution.",
+  },
+  "/class-10/algebra/quadratic-equations/practice": {
+    title: "Quadratic Equations Practice - Class 10 Maths | UKG Lab",
+    description: "Practice quadratic formula questions with progressive hints, approach and step-by-step solutions.",
   },
   "/formulas": {
     title: "Formula Library | Math by UKG Lab",

@@ -2,13 +2,14 @@ import { ArrowRight, BookOpen, Clock, Search } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
-import { getClassBySlug } from "../content";
+import { getBranchesForClass, getClassBySlug } from "../content";
 import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function ClassPage() {
   const { classSlug } = useParams();
   const mathClass = getClassBySlug(classSlug);
+  const branchData = getBranchesForClass(classSlug);
 
   useEffect(() => {
     if (mathClass) {
@@ -22,7 +23,7 @@ export function ClassPage() {
 
   if (!mathClass) return <NotFoundPage />;
 
-  const availableChapters = mathClass.chapters.filter((chapter) => chapter.lessons.length || chapter.practice.length);
+  const branches = branchData?.branches ?? [];
 
   return (
     <section className="py-12 sm:py-16">
@@ -33,7 +34,7 @@ export function ClassPage() {
           <div>
             <p className="section-kicker">CBSE Mathematics</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{mathClass.title}</h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">{mathClass.description}</p>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">Learn Class {mathClass.level} Mathematics topic by topic with concepts, examples, practice questions, hints and step-by-step solutions.</p>
           </div>
           <aside className="rounded-xl border border-ink-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">
             <p className="text-sm font-bold uppercase tracking-[0.14em] text-signal-700 dark:text-signal-400">Guest progress</p>
@@ -66,35 +67,33 @@ export function ClassPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="section-kicker">Syllabus</p>
-              <h2 className="section-title">Chapter Overview</h2>
+              <h2 className="section-title">Explore Mathematics</h2>
             </div>
-            {availableChapters.length ? (
-              <p className="text-sm font-semibold text-ink-500 dark:text-ink-400">{availableChapters.length} chapter with sample learning material available</p>
+            {branches.length ? (
+              <p className="text-sm font-semibold text-ink-500 dark:text-ink-400">{branches.length} branch{branches.length === 1 ? "" : "es"} from current chapter data</p>
             ) : null}
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            {mathClass.chapters.map((chapter) => {
-              const lessonCount = chapter.lessons.length;
-              const questionCount = chapter.practice.length;
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {branches.map((branch, index) => {
+              const chapterCount = branch.chapters.length;
+              const topicCount = branch.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0);
 
               return (
-                <article key={chapter.slug} className="surface-card rounded-xl p-6 transition hover:-translate-y-0.5 hover:border-signal-500">
+                <article key={branch.slug} className="surface-card rounded-xl p-6 transition hover:-translate-y-0.5 hover:border-signal-500">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="font-mono text-sm font-semibold text-signal-700 dark:text-signal-400">Chapter {chapter.order}</p>
-                      <h3 className="mt-2 text-2xl font-semibold text-ink-950 dark:text-white">{chapter.title}</h3>
+                      <p className="font-mono text-sm font-semibold text-signal-700 dark:text-signal-400">{String(index + 1).padStart(2, "0")}</p>
+                      <h3 className="mt-2 text-2xl font-semibold uppercase text-ink-950 dark:text-white">{branch.name}</h3>
                     </div>
-                    {chapter.difficulty ? <span className="rounded-md bg-ink-100 px-2.5 py-1 text-xs font-bold text-ink-600 dark:bg-white/10 dark:text-ink-200">{chapter.difficulty}</span> : null}
                   </div>
-                  <p className="mt-4 text-sm leading-6 text-ink-600 dark:text-ink-300">{chapter.description}</p>
+                  <p className="mt-4 min-h-20 text-sm leading-6 text-ink-600 dark:text-ink-300">{branch.description}</p>
                   <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-ink-600 dark:text-ink-300">
-                    {lessonCount ? <span className="rounded-md border border-ink-200 px-2.5 py-1 dark:border-white/10">{lessonCount} lesson{lessonCount === 1 ? "" : "s"}</span> : null}
-                    {questionCount ? <span className="rounded-md border border-ink-200 px-2.5 py-1 dark:border-white/10">{questionCount} practice question{questionCount === 1 ? "" : "s"}</span> : null}
-                    {!lessonCount && !questionCount ? <span className="rounded-md border border-ink-200 px-2.5 py-1 dark:border-white/10">Content structure ready</span> : null}
+                    <span className="rounded-md border border-ink-200 px-2.5 py-1 dark:border-white/10">{chapterCount} Chapter{chapterCount === 1 ? "" : "s"}</span>
+                    {topicCount ? <span className="rounded-md border border-ink-200 px-2.5 py-1 dark:border-white/10">{topicCount} Topic{topicCount === 1 ? "" : "s"}</span> : null}
                   </div>
-                  <Link className="focus-ring mt-7 inline-flex items-center gap-2 rounded text-sm font-semibold text-ink-900 hover:text-signal-700 dark:text-white dark:hover:text-signal-400" to={`/${mathClass.slug}/${chapter.slug}`}>
-                    Start Chapter <ArrowRight size={17} aria-hidden="true" />
+                  <Link className="focus-ring mt-7 inline-flex items-center gap-2 rounded text-sm font-semibold text-ink-900 hover:text-signal-700 dark:text-white dark:hover:text-signal-400" to={`/${mathClass.slug}/${branch.slug}`}>
+                    Explore <ArrowRight size={17} aria-hidden="true" />
                   </Link>
                 </article>
               );

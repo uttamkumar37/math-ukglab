@@ -5,6 +5,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { MathShell } from "./math/components/MathShell";
 import { AboutMathPage } from "./math/pages/AboutMathPage";
 import { BookmarksPage } from "./math/pages/BookmarksPage";
+import { BranchPage } from "./math/pages/BranchPage";
 import { ChapterPage } from "./math/pages/ChapterPage";
 import { ClassPage } from "./math/pages/ClassPage";
 import { DashboardPage } from "./math/pages/DashboardPage";
@@ -31,6 +32,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="formulas" element={<FormulasPage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path=":classSlug" element={<ClassPage />} />
+            <Route path=":classSlug/:branchSlug" element={<BranchPage />} />
+            <Route path=":classSlug/:branchSlug/:chapterSlug" element={<ChapterPage />} />
+            <Route path=":classSlug/:branchSlug/:chapterSlug/practice" element={<PracticePage />} />
+            <Route path=":classSlug/:branchSlug/:chapterSlug/test" element={<TestPage />} />
+            <Route path=":classSlug/:branchSlug/:chapterSlug/solutions/:questionSlug" element={<PracticePage />} />
+            <Route path=":classSlug/:branchSlug/:chapterSlug/:lessonSlug" element={<LessonPage />} />
             <Route path=":classSlug/:chapterSlug" element={<ChapterPage />} />
             <Route path=":classSlug/:chapterSlug/practice" element={<PracticePage />} />
             <Route path=":classSlug/:chapterSlug/test" element={<TestPage />} />

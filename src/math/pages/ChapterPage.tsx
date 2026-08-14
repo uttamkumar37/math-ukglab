@@ -1,52 +1,62 @@
 import { ArrowRight, ClipboardCheck, FileText, Lightbulb, ListChecks, NotebookTabs } from "lucide-react";
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { Diagram } from "../components/Diagram";
 import { MathBlock } from "../components/MathRender";
-import { getChapter } from "../content";
+import { getChapter, getLesson } from "../content";
 import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function ChapterPage() {
-  const { classSlug, chapterSlug } = useParams();
-  const found = getChapter(classSlug, chapterSlug);
+  const { classSlug, branchSlug, chapterSlug } = useParams();
+  const found = getChapter(classSlug, chapterSlug, branchSlug);
+  const legacyChapter = !found && (chapterSlug === "practice" || chapterSlug === "test") ? getChapter(classSlug, branchSlug) : undefined;
+  const legacyLesson = !found ? getLesson(classSlug, branchSlug, chapterSlug) : undefined;
 
   useEffect(() => {
     if (found) {
       updateMathSeo({
         title: `${found.chapter.title} - CBSE Class ${found.mathClass.level} Maths`,
         description: found.chapter.description,
-        path: `/${found.mathClass.slug}/${found.chapter.slug}`,
+        path: `/${found.mathClass.slug}/${found.branch.slug}/${found.chapter.slug}`,
       });
     }
   }, [found]);
 
+  if (!found && legacyChapter) {
+    return <Navigate replace to={`/${legacyChapter.mathClass.slug}/${legacyChapter.branch.slug}/${legacyChapter.chapter.slug}/${chapterSlug}`} />;
+  }
+
+  if (!found && legacyLesson) {
+    return <Navigate replace to={`/${legacyLesson.mathClass.slug}/${legacyLesson.branch.slug}/${legacyLesson.chapter.slug}/${legacyLesson.lesson.slug}`} />;
+  }
+
   if (!found) return <NotFoundPage />;
 
-  const { mathClass, chapter } = found;
+  const { mathClass, branch, chapter } = found;
   const firstLesson = chapter.lessons[0];
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${chapter.slug}` }]} />
+        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }]} />
 
         <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
           <div>
-            <p className="section-kicker">Chapter {chapter.order}</p>
+            <p className="section-kicker">{branch.name} · Chapter {chapter.order}</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{chapter.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">{chapter.overview}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               {firstLesson ? (
-                <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${chapter.slug}/${firstLesson.slug}`}>
-                  Start First Lesson <ArrowRight size={17} aria-hidden="true" />
+                <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/${firstLesson.slug}`}>
+                  Start First Topic <ArrowRight size={17} aria-hidden="true" />
                 </Link>
               ) : null}
-              <Link className="focus-ring inline-flex min-h-11 items-center rounded-md border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-900 hover:border-signal-500 dark:border-white/10 dark:bg-white/5 dark:text-white" to={`/${mathClass.slug}/${chapter.slug}/practice`}>
+              <Link className="focus-ring inline-flex min-h-11 items-center rounded-md border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-900 hover:border-signal-500 dark:border-white/10 dark:bg-white/5 dark:text-white" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/practice`}>
                 Practice
               </Link>
-              <Link className="focus-ring inline-flex min-h-11 items-center rounded-md border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-900 hover:border-signal-500 dark:border-white/10 dark:bg-white/5 dark:text-white" to={`/${mathClass.slug}/${chapter.slug}/test`}>
+              <Link className="focus-ring inline-flex min-h-11 items-center rounded-md border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-900 hover:border-signal-500 dark:border-white/10 dark:bg-white/5 dark:text-white" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/test`}>
                 Chapter Test
               </Link>
             </div>
@@ -57,7 +67,7 @@ export function ChapterPage() {
             </div>
             <p className="mt-5 text-sm font-semibold text-ink-950 dark:text-white">Learning path</p>
             <div className="mt-3 grid gap-2 text-sm text-ink-600 dark:text-ink-300">
-              {["Overview", "Concepts", "Examples", "Practice", "NCERT Practice", "Chapter Test", "Formula / Revision"].map((item) => (
+              {["Class", "Branch", "Chapter", "Topic", "Concept", "Example", "Practice", "Hint", "Approach", "Solution"].map((item) => (
                 <span key={item} className="rounded-md border border-ink-200 px-3 py-2 dark:border-white/10">{item}</span>
               ))}
             </div>
@@ -67,11 +77,11 @@ export function ChapterPage() {
         <div className="mt-14 grid gap-6 lg:grid-cols-[1fr_340px]">
           <div className="space-y-6">
             <section className="surface-card rounded-xl p-6">
-              <h2 className="text-2xl font-semibold">Concept Lessons</h2>
+              <h2 className="text-2xl font-semibold">Topics</h2>
               {chapter.lessons.length ? (
                 <div className="mt-5 grid gap-3">
                   {chapter.lessons.map((lesson) => (
-                    <Link key={lesson.slug} className="focus-ring flex items-center justify-between gap-4 rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/${lesson.slug}`}>
+                    <Link key={lesson.slug} className="focus-ring flex items-center justify-between gap-4 rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/${lesson.slug}`}>
                       <span>
                         <span className="block font-semibold">{lesson.title}</span>
                         <span className="mt-1 block text-sm text-ink-600 dark:text-ink-300">{lesson.summary}</span>
@@ -88,12 +98,12 @@ export function ChapterPage() {
             <section className="surface-card rounded-xl p-6">
               <h2 className="text-2xl font-semibold">Practice and Assessment</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <Link className="rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/practice`}>
+                <Link className="rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/practice`}>
                   <ListChecks className="text-signal-600 dark:text-signal-400" size={22} aria-hidden="true" />
                   <p className="mt-3 font-semibold">Practice</p>
                   <p className="mt-1 text-sm text-ink-600 dark:text-ink-300">Difficulty, hints, reminders and solutions.</p>
                 </Link>
-                <Link className="rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/test`}>
+                <Link className="rounded-lg border border-ink-200 p-4 transition hover:border-signal-500 dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/test`}>
                   <ClipboardCheck className="text-signal-600 dark:text-signal-400" size={22} aria-hidden="true" />
                   <p className="mt-3 font-semibold">Chapter Test</p>
                   <p className="mt-1 text-sm text-ink-600 dark:text-ink-300">Timer, review state and result architecture.</p>

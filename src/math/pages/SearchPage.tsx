@@ -1,11 +1,11 @@
 import { Search } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { allChapters, allFormulas, allLessons, allQuestions } from "../content";
+import { allChapters, allFormulas, allLessons, allQuestions, mathBranches } from "../content";
 import { updateMathSeo } from "../mathSeo";
 
 type Result = {
-  type: "Chapter" | "Lesson" | "Question" | "Formula";
+  type: "Branch" | "Chapter" | "Topic" | "Question" | "Formula";
   title: string;
   description: string;
   path: string;
@@ -16,19 +16,24 @@ function buildResults(query: string): Result[] {
   if (!normalized) return [];
 
   const results: Result[] = [];
+  mathBranches.forEach((branch) => {
+    if (`${branch.name} ${branch.description}`.toLowerCase().includes(normalized)) {
+      results.push({ type: "Branch", title: branch.name, description: branch.description, path: "/class-10/" + branch.slug });
+    }
+  });
   allChapters.forEach((chapter) => {
     if (`${chapter.title} ${chapter.description}`.toLowerCase().includes(normalized)) {
-      results.push({ type: "Chapter", title: chapter.title, description: `Class ${chapter.classLevel} · ${chapter.description}`, path: `/class-${chapter.classLevel}/${chapter.slug}` });
+      results.push({ type: "Chapter", title: chapter.title, description: `Class ${chapter.classLevel} · ${chapter.branch.name} · ${chapter.description}`, path: `/class-${chapter.classLevel}/${chapter.branchSlug}/${chapter.slug}` });
     }
   });
   allLessons.forEach((lesson) => {
     if (`${lesson.title} ${lesson.summary}`.toLowerCase().includes(normalized)) {
-      results.push({ type: "Lesson", title: lesson.title, description: `Class ${lesson.classLevel} · ${lesson.chapterTitle}`, path: `/class-${lesson.classLevel}/${lesson.chapterSlug}/${lesson.slug}` });
+      results.push({ type: "Topic", title: lesson.title, description: `Class ${lesson.classLevel} · ${lesson.branchName} · ${lesson.chapterTitle}`, path: `/class-${lesson.classLevel}/${lesson.branchSlug}/${lesson.chapterSlug}/${lesson.slug}` });
     }
   });
   allQuestions.forEach((question) => {
     if (`${question.question} ${question.topic}`.toLowerCase().includes(normalized)) {
-      results.push({ type: "Question", title: question.topic, description: `Class ${question.classLevel} · ${question.difficulty} · ${question.type}`, path: `/class-${question.classLevel}/${question.chapterSlug}/practice` });
+      results.push({ type: "Question", title: question.topic, description: `Class ${question.classLevel} · ${question.branchName} · ${question.chapterTitle} · ${question.difficulty} · ${question.type}`, path: `/class-${question.classLevel}/${question.branchSlug}/${question.chapterSlug}/practice` });
     }
   });
   allFormulas.forEach((formula) => {

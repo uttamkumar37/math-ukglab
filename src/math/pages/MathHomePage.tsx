@@ -30,7 +30,7 @@ export function MathHomePage() {
               Master CBSE Mathematics through proof-level clarity, visual reasoning, worked examples and structured practice for Classes 9-12.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link className="focus-ring inline-flex min-h-12 items-center gap-2 rounded-md bg-ink-950 px-5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100" to="/class-10/real-numbers/euclidean-division-lemma">
+              <Link className="focus-ring inline-flex min-h-12 items-center gap-2 rounded-md bg-ink-950 px-5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100" to="/class-10/algebra/quadratic-equations/quadratic-formula">
                 Start Learning <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <a className="focus-ring inline-flex min-h-12 items-center rounded-md border border-ink-200 bg-white px-5 text-sm font-semibold text-ink-900 transition hover:-translate-y-0.5 hover:border-signal-500 hover:text-signal-700 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-signal-400" href="#classes">

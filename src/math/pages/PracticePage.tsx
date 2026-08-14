@@ -8,9 +8,10 @@ import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function PracticePage() {
-  const { classSlug, chapterSlug } = useParams();
-  const found = getChapter(classSlug, chapterSlug);
+  const { classSlug, branchSlug, chapterSlug } = useParams();
+  const found = getChapter(classSlug, chapterSlug, branchSlug);
   const [hintCounts, setHintCounts] = useState<Record<string, number>>({});
+  const [approaches, setApproaches] = useState<Record<string, boolean>>({});
   const [solutions, setSolutions] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -18,19 +19,19 @@ export function PracticePage() {
       updateMathSeo({
         title: `${found.chapter.title} Practice - Class ${found.mathClass.level} Maths`,
         description: `Practice ${found.chapter.title} questions with hints and step-by-step solutions.`,
-        path: `/${found.mathClass.slug}/${found.chapter.slug}/practice`,
+        path: `/${found.mathClass.slug}/${found.branch.slug}/${found.chapter.slug}/practice`,
       });
     }
   }, [found]);
 
   if (!found) return <NotFoundPage />;
 
-  const { mathClass, chapter } = found;
+  const { mathClass, branch, chapter } = found;
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${chapter.slug}` }, { name: "Practice", path: `/${mathClass.slug}/${chapter.slug}/practice` }]} />
+        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }, { name: "Practice", path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}/practice` }]} />
         <div className="max-w-3xl">
           <p className="section-kicker">Practice</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">{chapter.title} Practice</h1>
@@ -50,7 +51,8 @@ export function PracticePage() {
                     <span className="rounded-md bg-ink-100 px-2.5 py-1 text-xs font-bold text-ink-600 dark:bg-white/10 dark:text-ink-200">{question.difficulty}</span>
                     <span className="rounded-md bg-signal-500/10 px-2.5 py-1 text-xs font-bold text-signal-700 dark:text-signal-400">{question.type}</span>
                   </div>
-                  <h2 className="mt-5 text-xl font-semibold"><MathText text={question.question} /></h2>
+                  <p className="mt-5 text-sm font-bold uppercase tracking-[0.14em] text-ink-500 dark:text-ink-400">{mathClass.title} · {branch.name} · {chapter.title} · {question.topic}</p>
+                  <h2 className="mt-3 text-xl font-semibold"><MathText text={question.question} /></h2>
                   {question.options ? (
                     <div className="mt-5 grid gap-2">
                       {question.options.map((option) => (
@@ -71,10 +73,24 @@ export function PracticePage() {
                     </div>
                     {canShowMoreHints ? (
                       <button className="focus-ring mt-4 inline-flex min-h-10 items-center gap-2 rounded-md border border-ink-200 px-3 text-sm font-semibold dark:border-white/10" type="button" onClick={() => setHintCounts((value) => ({ ...value, [question.slug]: visibleHints + 1 }))}>
-                        Show Next Help <ChevronDown size={16} aria-hidden="true" />
+                        Get a Hint <ChevronDown size={16} aria-hidden="true" />
                       </button>
                     ) : null}
                   </div>
+
+                  <button className="focus-ring mt-5 inline-flex min-h-11 items-center gap-2 rounded-md border border-ink-200 px-4 text-sm font-semibold dark:border-white/10" type="button" onClick={() => setApproaches((value) => ({ ...value, [question.slug]: !value[question.slug] }))}>
+                    <Lightbulb size={17} aria-hidden="true" /> {approaches[question.slug] ? "Hide Approach" : "Show Approach"}
+                  </button>
+                  {approaches[question.slug] ? (
+                    <div className="mt-5 rounded-lg border border-signal-500/30 bg-signal-500/8 p-4">
+                      <p className="font-semibold">Approach</p>
+                      <ol className="mt-3 space-y-2 text-sm leading-6">
+                        {question.approach.map((step) => (
+                          <li key={step}><MathText text={step} /></li>
+                        ))}
+                      </ol>
+                    </div>
+                  ) : null}
 
                   <button className="focus-ring mt-5 inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" type="button" onClick={() => setSolutions((value) => ({ ...value, [question.slug]: !value[question.slug] }))}>
                     <Eye size={17} aria-hidden="true" /> {solutions[question.slug] ? "Hide Solution" : "Show Solution"}
@@ -83,12 +99,25 @@ export function PracticePage() {
                     <div className="mt-5 rounded-lg border border-ink-200 p-4 dark:border-white/10">
                       <p className="font-semibold">Step-by-step solution</p>
                       <ol className="mt-3 space-y-2 text-sm leading-6">
-                        {question.solution.map((step, stepIndex) => (
+                        {(question.solutionSteps ?? question.solution ?? []).map((step, stepIndex) => (
                           <li key={step}><span className="font-semibold">Step {stepIndex + 1}: </span><MathText text={step} /></li>
                         ))}
                       </ol>
                       <p className="mt-4 text-sm leading-6 text-ink-600 dark:text-ink-300">{question.explanation}</p>
-                      <p className="mt-3 text-sm font-semibold">Final Answer: <MathText text={question.answer} /></p>
+                      {question.alternativeMethods?.length ? (
+                        <div className="mt-4 rounded-md border border-ink-200 p-3 dark:border-white/10">
+                          <p className="text-sm font-semibold">Alternative Method</p>
+                          {question.alternativeMethods.map((method) => (
+                            <div key={method.title} className="mt-3">
+                              <p className="text-sm font-semibold">{method.title}</p>
+                              <ol className="mt-2 space-y-1 text-sm leading-6">
+                                {method.steps.map((step) => <li key={step}><MathText text={step} /></li>)}
+                              </ol>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                      <p className="mt-4 rounded-md bg-ink-950 px-3 py-2 text-sm font-semibold text-white dark:bg-white dark:text-ink-950">Final Answer: <MathText text={question.finalAnswer ?? question.answer} /></p>
                     </div>
                   ) : null}
                 </article>
@@ -99,7 +128,7 @@ export function PracticePage() {
           <div className="mt-10 rounded-xl border border-ink-200 bg-white p-8 dark:border-white/10 dark:bg-white/[0.04]">
             <h2 className="text-2xl font-semibold">Practice architecture is ready.</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-600 dark:text-ink-300">Questions can be added with difficulty, type, topic, hints, answer and solution fields. No placeholder questions are shown for this chapter.</p>
-            <Link className="focus-ring mt-6 inline-flex min-h-11 items-center rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${chapter.slug}`}>Back to Chapter</Link>
+            <Link className="focus-ring mt-6 inline-flex min-h-11 items-center rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}`}>Back to Chapter</Link>
           </div>
         )}
       </div>

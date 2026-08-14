@@ -8,8 +8,8 @@ import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function TestPage() {
-  const { classSlug, chapterSlug } = useParams();
-  const found = getChapter(classSlug, chapterSlug);
+  const { classSlug, branchSlug, chapterSlug } = useParams();
+  const found = getChapter(classSlug, chapterSlug, branchSlug);
   const [started, setStarted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -20,22 +20,22 @@ export function TestPage() {
       updateMathSeo({
         title: `${found.chapter.title} Chapter Test - Class ${found.mathClass.level} Maths`,
         description: `Chapter test architecture for ${found.chapter.title}.`,
-        path: `/${found.mathClass.slug}/${found.chapter.slug}/test`,
+        path: `/${found.mathClass.slug}/${found.branch.slug}/${found.chapter.slug}/test`,
       });
     }
   }, [found]);
 
   if (!found) return <NotFoundPage />;
 
-  const { mathClass, chapter } = found;
+  const { mathClass, branch, chapter } = found;
   const questions = chapter.practice;
-  const correct = submitted ? questions.filter((question) => answers[question.slug] === question.answer).length : 0;
+  const correct = submitted ? questions.filter((question) => answers[question.slug] === (question.finalAnswer ?? question.answer)).length : 0;
   const attempted = Object.keys(answers).length;
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${chapter.slug}` }, { name: "Chapter Test", path: `/${mathClass.slug}/${chapter.slug}/test` }]} />
+        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }, { name: "Chapter Test", path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}/test` }]} />
         <div className="max-w-3xl">
           <p className="section-kicker">Assessment</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">{chapter.title} - Chapter Test</h1>
@@ -46,7 +46,7 @@ export function TestPage() {
           <div className="mt-10 rounded-xl border border-ink-200 bg-white p-8 dark:border-white/10 dark:bg-white/[0.04]">
             <h2 className="text-2xl font-semibold">Test architecture is ready.</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-600 dark:text-ink-300">No fake test questions are shown. Add real test data to enable timed chapter tests and review analysis.</p>
-            <Link className="focus-ring mt-6 inline-flex min-h-11 items-center rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${chapter.slug}`}>Back to Chapter</Link>
+            <Link className="focus-ring mt-6 inline-flex min-h-11 items-center rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}`}>Back to Chapter</Link>
           </div>
         ) : !started ? (
           <div className="mt-10 rounded-xl border border-ink-200 bg-white p-8 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">

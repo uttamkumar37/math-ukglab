@@ -26,12 +26,12 @@ function readBookmarks(): BookmarkItem[] {
 }
 
 export function LessonPage() {
-  const { classSlug, chapterSlug, lessonSlug } = useParams();
-  const found = getLesson(classSlug, chapterSlug, lessonSlug);
+  const { classSlug, branchSlug, chapterSlug, lessonSlug } = useParams();
+  const found = getLesson(classSlug, chapterSlug, lessonSlug, branchSlug);
   const [showSolution, setShowSolution] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
-  const path = found ? `/${found.mathClass.slug}/${found.chapter.slug}/${found.lesson.slug}` : "/";
+  const path = found ? `/${found.mathClass.slug}/${found.branch.slug}/${found.chapter.slug}/${found.lesson.slug}` : "/";
   const currentIndex = found ? found.chapter.lessons.findIndex((lesson) => lesson.slug === found.lesson.slug) : -1;
   const prevLesson = found && currentIndex > 0 ? found.chapter.lessons[currentIndex - 1] : undefined;
   const nextLesson = found && currentIndex >= 0 ? found.chapter.lessons[currentIndex + 1] : undefined;
@@ -53,7 +53,7 @@ export function LessonPage() {
 
   if (!found) return <NotFoundPage />;
 
-  const { mathClass, chapter, lesson } = found;
+  const { mathClass, branch, chapter, lesson } = found;
 
   const toggleBookmark = () => {
     const bookmarks = readBookmarks();
@@ -66,12 +66,13 @@ export function LessonPage() {
   return (
     <section className="py-8 sm:py-12">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${chapter.slug}` }, { name: lesson.title, path }]} />
+        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }, { name: lesson.title, path }]} />
 
         <div className="grid gap-8 xl:grid-cols-[260px_minmax(0,1fr)_300px]">
           <aside className="xl:sticky xl:top-24 xl:self-start">
             <div className="rounded-xl border border-ink-200 bg-white p-4 dark:border-white/10 dark:bg-white/[0.04]">
               <p className="text-sm font-bold text-ink-950 dark:text-white">Class {mathClass.level}</p>
+              <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">{branch.name}</p>
               <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">{chapter.title}</p>
               <nav className="mt-5 grid gap-2" aria-label="Lesson stages">
                 {stages.map((stage, index) => (
@@ -86,7 +87,7 @@ export function LessonPage() {
 
           <article className="min-w-0">
             <div className="rounded-xl border border-ink-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.035] sm:p-8">
-              <p className="section-kicker">Lesson</p>
+              <p className="section-kicker">Topic · {branch.name}</p>
               <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{lesson.title}</h1>
               <p className="mt-5 text-lg leading-8 text-ink-700 dark:text-ink-200">{lesson.summary}</p>
 
@@ -100,6 +101,26 @@ export function LessonPage() {
                     </li>
                   ))}
                 </ul>
+              </section>
+
+              <section className="mt-10">
+                <h2 className="text-2xl font-semibold">What is it?</h2>
+                <p className="mt-4 text-base leading-7 text-ink-700 dark:text-ink-200">{lesson.what ?? lesson.summary}</p>
+              </section>
+
+              <section className="mt-10">
+                <h2 className="text-2xl font-semibold">Why do we need it?</h2>
+                <p className="mt-4 text-base leading-7 text-ink-700 dark:text-ink-200">{lesson.whyItMatters ?? lesson.why}</p>
+              </section>
+
+              <section className="mt-10">
+                <h2 className="text-2xl font-semibold">How does it work?</h2>
+                <p className="mt-4 text-base leading-7 text-ink-700 dark:text-ink-200">{lesson.howItWorks ?? lesson.summary}</p>
+              </section>
+
+              <section className="mt-10">
+                <h2 className="text-2xl font-semibold">Formula / Rule</h2>
+                {lesson.formula ? <MathBlock math={lesson.formula} /> : <p className="mt-4 text-sm leading-6 text-ink-600 dark:text-ink-300">No single formula is required for this topic.</p>}
               </section>
 
               <section className="mt-10">
@@ -159,16 +180,16 @@ export function LessonPage() {
 
               <div className="mt-12 flex flex-col gap-3 border-t border-ink-200 pt-6 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
                 {prevLesson ? (
-                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md border border-ink-200 px-4 text-sm font-semibold dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/${prevLesson.slug}`}>
-                    <ArrowLeft size={17} aria-hidden="true" /> Previous Lesson
+                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md border border-ink-200 px-4 text-sm font-semibold dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/${prevLesson.slug}`}>
+                    <ArrowLeft size={17} aria-hidden="true" /> Previous Topic
                   </Link>
                 ) : <span />}
                 {nextLesson ? (
-                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${chapter.slug}/${nextLesson.slug}`}>
-                    Next Lesson <ArrowRight size={17} aria-hidden="true" />
+                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/${nextLesson.slug}`}>
+                    Next Topic <ArrowRight size={17} aria-hidden="true" />
                   </Link>
                 ) : (
-                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${chapter.slug}/practice`}>
+                  <Link className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/practice`}>
                     Practice <ArrowRight size={17} aria-hidden="true" />
                   </Link>
                 )}
@@ -193,9 +214,9 @@ export function LessonPage() {
             <div className="rounded-xl border border-ink-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.04]">
               <p className="font-semibold">Chapter Navigation</p>
               <div className="mt-4 grid gap-2">
-                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}`}>Overview</Link>
-                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/practice`}>Practice</Link>
-                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${chapter.slug}/test`}>Chapter Test</Link>
+                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}`}>Overview</Link>
+                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/practice`}>Practice</Link>
+                <Link className="rounded-md border border-ink-200 px-3 py-2 text-sm dark:border-white/10" to={`/${mathClass.slug}/${branch.slug}/${chapter.slug}/test`}>Chapter Test</Link>
               </div>
             </div>
           </aside>
