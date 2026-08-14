@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Brain, Search, Sigma } from "lucide-react";
+import { ArrowRight, BookOpen, Brain, Calculator, FunctionSquare, Search, Sigma } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { mathClasses } from "../content";
@@ -12,17 +12,20 @@ export function MathHomePage() {
     <>
       <section className="relative overflow-hidden border-b border-ink-200 bg-ink-50 dark:border-white/10 dark:bg-ink-950">
         <div className="subtle-grid pointer-events-none absolute inset-x-0 top-0 h-[520px]" />
-        <div className="section-shell relative grid min-h-[calc(100svh-4rem)] items-center gap-12 py-14 lg:grid-cols-[1fr_.9fr]">
+        <div className="section-shell relative grid min-h-[calc(100svh-4rem)] items-center gap-12 py-12 lg:grid-cols-[1fr_.86fr] lg:py-14">
           <div className="max-w-3xl">
-            <p className="inline-flex rounded-full border border-ink-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-signal-700 shadow-soft dark:border-white/10 dark:bg-white/[0.04] dark:text-signal-400">
-              CBSE Mathematics · Classes 9-12
-            </p>
+            <div className="inline-flex items-center gap-3 rounded-md border border-ink-200 bg-white px-3 py-2 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">
+              <img className="h-10 w-10 rounded-md object-cover" src="/brand/math-ukg-lab.png" alt="" />
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-signal-700 dark:text-signal-400">
+                Math by UKG Lab · CBSE Classes 9-12
+              </p>
+            </div>
             <h1 className="mt-7 text-5xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-6xl lg:text-7xl">
               Understand Math.
               <span className="block">Don't Memorize It.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-700 dark:text-ink-200">
-              Master CBSE Mathematics with clear concepts, step-by-step explanations, worked examples and structured practice.
+              Master CBSE Mathematics through proof-level clarity, visual reasoning, worked examples and structured practice for Classes 9-12.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link className="focus-ring inline-flex min-h-12 items-center gap-2 rounded-md bg-ink-950 px-5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100" to="/class-10/real-numbers/euclidean-division-lemma">
@@ -32,18 +35,37 @@ export function MathHomePage() {
                 Explore Classes
               </a>
             </div>
-            <p className="mt-7 text-sm font-semibold text-ink-500 dark:text-ink-400">A UKG Lab Learning Product</p>
+            <div className="mt-7 grid max-w-xl gap-2 sm:grid-cols-3">
+              {[
+                { label: "Concepts", value: "Visual-first" },
+                { label: "Practice", value: "Step guided" },
+                { label: "Level", value: "Advanced" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-md border border-ink-200 bg-white/75 px-3 py-3 dark:border-white/10 dark:bg-white/[0.04]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-500 dark:text-ink-400">{item.label}</p>
+                  <p className="mt-1 text-sm font-semibold text-ink-950 dark:text-white">{item.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="relative mx-auto grid aspect-square w-full max-w-[480px] place-items-center rounded-xl border border-ink-200 bg-white p-6 shadow-lift dark:border-white/10 dark:bg-white/[0.04]">
-            <div className="absolute inset-6 rounded-xl border border-dashed border-ink-200 dark:border-white/10" />
-            <svg viewBox="0 0 420 420" role="img" aria-label="Coordinate plane with function curve" className="relative h-full w-full">
-              <path d="M42 210H378M210 42V378" className="stroke-ink-300 dark:stroke-white/20" strokeWidth="2" />
-              <path d="M54 300C110 180 154 152 210 210C266 268 310 240 366 92" className="stroke-signal-500" strokeWidth="6" fill="none" strokeLinecap="round" />
-              <circle cx="210" cy="210" r="9" className="fill-flame-500" />
-              <text x="232" y="198" className="fill-ink-500 text-xl font-bold dark:fill-ink-300">f(x)</text>
-              <text x="260" y="254" className="fill-signal-700 text-2xl font-bold dark:fill-signal-400">x² + y²</text>
-            </svg>
+          <div className="relative mx-auto w-full max-w-[500px]">
+            <div className="absolute -inset-3 rounded-xl border border-signal-200/70 bg-white/55 shadow-lift dark:border-signal-400/20 dark:bg-white/[0.03]" />
+            <div className="relative rounded-xl border border-ink-200 bg-white p-3 shadow-soft dark:border-white/10 dark:bg-white">
+              <img className="aspect-square w-full rounded-lg object-cover" src="/brand/math-ukg-lab.png" alt="Math by UKG Lab brand: Understand Math. Don't Memorize It. CBSE Classes 9-12" />
+            </div>
+            <div className="absolute -bottom-5 left-6 right-6 grid grid-cols-3 overflow-hidden rounded-md border border-ink-200 bg-ink-950 text-white shadow-lift dark:border-white/10">
+              {[
+                { icon: FunctionSquare, text: "Algebra" },
+                { icon: Calculator, text: "Proofs" },
+                { icon: Sigma, text: "Practice" },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex min-h-14 items-center justify-center gap-2 border-r border-white/10 px-2 text-xs font-semibold last:border-r-0 sm:text-sm">
+                  <Icon size={16} className="text-signal-300" aria-hidden="true" />
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

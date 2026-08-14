@@ -30,7 +30,7 @@ export function MathShell() {
       <header className="sticky top-0 z-50 border-b border-ink-200/80 bg-ink-50/92 backdrop-blur-xl dark:border-white/10 dark:bg-ink-950/90">
         <div className="section-shell flex min-h-16 items-center justify-between gap-4">
           <Link className="focus-ring inline-flex items-center gap-3 rounded-md" to="/" aria-label="Math by UKG Lab home">
-            <span className="grid h-9 w-9 place-items-center rounded-brand bg-ink-950 text-sm font-black text-white shadow-soft dark:bg-white dark:text-ink-950">M</span>
+            <img className="h-10 w-10 rounded-md border border-ink-200 bg-white object-cover shadow-soft dark:border-white/10" src="/brand/math-ukg-lab.png" alt="" />
             <span className="leading-none">
               <span className="block text-base font-bold">{mathSite.productName}</span>
               <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-ink-500 dark:text-ink-400">by UKG Lab</span>
@@ -95,7 +95,7 @@ export function MathShell() {
         <div className="section-shell grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
             <div className="inline-flex items-center gap-3">
-              <span className="grid h-9 w-9 place-items-center rounded-brand bg-ink-950 text-sm font-black text-white dark:bg-white dark:text-ink-950">M</span>
+              <img className="h-10 w-10 rounded-md border border-ink-200 bg-white object-cover shadow-soft dark:border-white/10" src="/brand/math-ukg-lab.png" alt="" />
               <div>
                 <p className="font-semibold">{mathSite.name}</p>
                 <p className="text-sm text-ink-500 dark:text-ink-400">CBSE Mathematics for Classes 9-12</p>

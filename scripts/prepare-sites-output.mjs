@@ -1,7 +1,8 @@
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = process.cwd();
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(root, "dist");
 const distOpenAiDir = path.join(distDir, ".openai");
 const serverDir = path.join(distDir, "server");
