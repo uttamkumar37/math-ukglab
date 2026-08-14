@@ -5,6 +5,8 @@ import { mathClasses } from "../content";
 import { mathSite } from "../mathConfig";
 import { updateMathSeo } from "../mathSeo";
 
+const brandImage = `${import.meta.env.BASE_URL}brand/math-ukg-lab.png`;
+
 export function MathHomePage() {
   useEffect(() => updateMathSeo({ path: "/", description: mathSite.description }), []);
 
@@ -15,7 +17,7 @@ export function MathHomePage() {
         <div className="section-shell relative grid min-h-[calc(100svh-4rem)] items-center gap-12 py-12 lg:grid-cols-[1fr_.86fr] lg:py-14">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-3 rounded-md border border-ink-200 bg-white px-3 py-2 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">
-              <img className="h-10 w-10 rounded-md object-cover" src="/brand/math-ukg-lab.png" alt="" />
+              <img className="h-10 w-10 rounded-md object-cover" src={brandImage} alt="" />
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-signal-700 dark:text-signal-400">
                 Math by UKG Lab · CBSE Classes 9-12
               </p>
@@ -52,7 +54,7 @@ export function MathHomePage() {
           <div className="relative mx-auto w-full max-w-[500px]">
             <div className="absolute -inset-3 rounded-xl border border-signal-200/70 bg-white/55 shadow-lift dark:border-signal-400/20 dark:bg-white/[0.03]" />
             <div className="relative rounded-xl border border-ink-200 bg-white p-3 shadow-soft dark:border-white/10 dark:bg-white">
-              <img className="aspect-square w-full rounded-lg object-cover" src="/brand/math-ukg-lab.png" alt="Math by UKG Lab brand: Understand Math. Don't Memorize It. CBSE Classes 9-12" />
+              <img className="aspect-square w-full rounded-lg object-cover" src={brandImage} alt="Math by UKG Lab brand: Understand Math. Don't Memorize It. CBSE Classes 9-12" />
             </div>
             <div className="absolute -bottom-5 left-6 right-6 grid grid-cols-3 overflow-hidden rounded-md border border-ink-200 bg-ink-950 text-white shadow-lift dark:border-white/10">
               {[

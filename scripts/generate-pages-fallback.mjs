@@ -1,8 +1,10 @@
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { env } from "node:process";
 
 const root = path.resolve("dist");
 const origin = "https://math.ukglab.com";
+const basePath = env.VITE_BASE_PATH ?? "/";
 
 const routeMetadata = {
   "/class-9": {
@@ -96,3 +98,22 @@ for (const [route, metadata] of Object.entries(routeMetadata)) {
   await cp(path.join(root, "index.html"), destination);
   await writeFile(destination, applyMetadata(html, route, metadata));
 }
+
+await writeFile(
+  path.join(root, "404.html"),
+  `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Math by UKG Lab</title>
+    <script>
+      sessionStorage.redirect = location.href;
+      location.replace(${JSON.stringify(basePath)});
+    </script>
+  </head>
+  <body>
+    Redirecting to Math by UKG Lab...
+  </body>
+</html>
+`,
+);
