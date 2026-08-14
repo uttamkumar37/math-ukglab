@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/generate-pages-fallback.mjs",
+    "build": "tsc -b && vite build && node scripts/generate-pages-fallback.mjs && node scripts/prepare-sites-output.mjs",
     "lint": "eslint . --max-warnings=0",
     "preview": "vite preview"
   },
