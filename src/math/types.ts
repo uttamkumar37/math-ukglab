@@ -5,6 +5,9 @@ export type StudentGoal = "school" | "jee";
 export type LearningLevel = "simple" | "medium" | "hard";
 export type JeeExam = "jee-main" | "jee-advanced";
 export type QuestionDifficulty = "Simple" | "Medium" | "Hard";
+export type CurriculumStatus = "active" | "archived" | "draft";
+export type QuestionSourceType = "UKG_ORIGINAL" | "NCERT_ALIGNED" | "EXEMPLAR_STYLE" | "CBSE_STYLE";
+export type JeeRelevance = "NONE" | "FOUNDATION" | "DIRECT" | "PREREQUISITE";
 
 export type StudentPreferences = {
   goal: StudentGoal | null;
@@ -20,6 +23,9 @@ export type MathBranch = {
   description: string;
   order: number;
   identity: "numbers" | "algebra" | "geometry" | "coordinate" | "trigonometry" | "calculus" | "statistics" | "sets" | "mensuration";
+  curriculumId?: string;
+  unitNumber?: number;
+  shortTitle?: string;
 };
 
 export type LessonBlock =
@@ -73,6 +79,8 @@ export type Lesson = {
   };
   formula?: string;
   status: "sample" | "planned";
+  estimatedMinutes?: number;
+  jeeRelevance?: JeeRelevance;
   createdAt: string;
   updatedAt: string;
 };
@@ -97,6 +105,12 @@ export type PracticeQuestion = {
   explanation: string;
   finalAnswer?: string;
   alternativeMethods?: { title: string; steps: string[] }[];
+  sourceType?: QuestionSourceType;
+  curriculumId?: string;
+  unitId?: string;
+  chapterId?: string;
+  topicId?: string;
+  commonMistakes?: string[];
 };
 
 export type Formula = {
@@ -124,6 +138,53 @@ export type Chapter = {
   practice: PracticeQuestion[];
   formulas: Formula[];
   examLevels?: JeeExam[];
+  curriculumId?: string;
+  unitId?: string;
+  notes?: {
+    definitions: string[];
+    keyConcepts: string[];
+    formulas: string[];
+    properties: string[];
+    commonMistakes: string[];
+    examReminders: string[];
+    quickRevision: string[];
+  };
+  workedExamples?: {
+    level: QuestionDifficulty;
+    title: string;
+    question: string;
+    thinking: string;
+    approach: string[];
+    steps: string[];
+    finalAnswer: string;
+    whyItWorks: string;
+  }[];
+  ncertCompanion?: {
+    chapterContext: string;
+    conceptSupport: string[];
+    exerciseSupport: string[];
+    questionSupport: string[];
+  };
+  revision?: {
+    keyConcepts: string[];
+    formulae: string[];
+    properties: string[];
+    diagrams: string[];
+    commonMistakes: string[];
+    fiveMinuteRevision: string[];
+  };
+};
+
+export type Curriculum = {
+  id: string;
+  board: "CBSE";
+  academicYear: string;
+  classLevel: ClassLevel;
+  subject: "Mathematics";
+  version: string;
+  status: CurriculumStatus;
+  sourceLabel: string;
+  sourceUrl: string;
 };
 
 export type MathClass = {
@@ -133,4 +194,5 @@ export type MathClass = {
   promise: string;
   description: string;
   chapters: Chapter[];
+  curriculum?: Curriculum;
 };

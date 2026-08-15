@@ -127,6 +127,7 @@ export function PracticePage() {
                         <span className="rounded-md bg-ink-950 px-2.5 py-1 text-xs font-bold text-white dark:bg-white dark:text-ink-950">Question {index + 1}</span>
                         <span className="rounded-md bg-ink-100 px-2.5 py-1 text-xs font-bold text-ink-600 dark:bg-white/10 dark:text-ink-200">{question.difficulty}</span>
                         <span className="rounded-md bg-signal-500/10 px-2.5 py-1 text-xs font-bold text-signal-700 dark:text-signal-400">{question.type}</span>
+                        {question.sourceType ? <span className="rounded-md border border-ink-200 px-2.5 py-1 text-xs font-bold text-ink-500 dark:border-white/10 dark:text-ink-300">{question.sourceType.replaceAll("_", " ")}</span> : null}
                       </div>
                       <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-ink-500 dark:text-ink-400">{branch.name} · {chapter.title} · {question.topic} · {question.concept}</p>
                       <h2 className="mt-3 text-xl font-semibold leading-8"><MathText text={question.question} /></h2>

@@ -10,7 +10,7 @@ export const mathSite = {
 
 export const mathNav = [
   { label: "Learn", href: "/explore" },
-  { label: "Practice", href: "/class-10/algebra/quadratic-equations/practice" },
+  { label: "Practice", href: "/class-9/number-systems/number-systems/practice" },
   { label: "JEE", href: "/explore?goal=jee" },
   { label: "Classes", href: "/#classes" },
   { label: "Progress", href: "/dashboard" },

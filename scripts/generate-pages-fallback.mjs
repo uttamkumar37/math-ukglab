@@ -109,6 +109,41 @@ const routeMetadata = {
   },
 };
 
+const class9FallbackRoutes = [
+  ["/class-9/number-systems", "Number System - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Number System as Unit I with chapters, topics, notes, practice and revision."],
+  ["/class-9/algebra", "Algebra - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Algebra with polynomials, identities, sequences and linear equations."],
+  ["/class-9/coordinate-geometry", "Coordinate Geometry - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Coordinate Geometry with points, axes, quadrants and graph understanding."],
+  ["/class-9/geometry", "Geometry - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Geometry with Euclid's geometry, lines, angles, triangles, quadrilaterals and circles."],
+  ["/class-9/mensuration", "Mensuration - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Mensuration with area, perimeter, surface area and volume."],
+  ["/class-9/statistics-probability", "Statistics & Probability - CBSE Class 9 Maths | UKG Lab", "Study Class 9 Statistics and Probability with data and introductory chance concepts."],
+  ["/class-9/number-systems/number-systems", "Number Systems - CBSE Class 9 Maths | UKG Lab", "Learn rational and irrational numbers, decimals, roots and number-line representation."],
+  ["/class-9/number-systems/number-systems/practice", "Number Systems Practice - Class 9 Maths | UKG Lab", "Practice Class 9 Number Systems with simple, medium and hard questions, hints and solutions."],
+  ["/class-9/number-systems/number-systems/test", "Number Systems Chapter Test - Class 9 Maths | UKG Lab", "Take the Class 9 Number Systems chapter test with answer states and result architecture."],
+  ["/class-9/number-systems/number-systems/real-numbers-and-the-number-line", "Real Numbers and the Number Line - Class 9 Maths | UKG Lab", "Learn how rational and irrational numbers sit together on the number line."],
+  ["/class-9/number-systems/number-systems/rational-and-irrational-numbers", "Rational and Irrational Numbers - Class 9 Maths | UKG Lab", "Classify rational and irrational numbers using fraction form and decimal expansion."],
+  ["/class-9/number-systems/number-systems/decimal-expansions", "Decimal Expansions - Class 9 Maths | UKG Lab", "Understand terminating, recurring and non-recurring decimals in Class 9 Number Systems."],
+  ["/class-9/number-systems/number-systems/square-roots-and-irrationality", "Square Roots and Irrationality - Class 9 Maths | UKG Lab", "Learn when square roots are rational or irrational and how to keep exact values."],
+  ["/class-9/number-systems/number-systems/operations-on-real-numbers", "Operations on Real Numbers - Class 9 Maths | UKG Lab", "Simplify and reason with real-number operations and surds."],
+  ["/class-9/algebra/introduction-to-polynomials", "Introduction to Polynomials - Class 9 Maths | UKG Lab", "Study Class 9 polynomial vocabulary, degree, value and zeros."],
+  ["/class-9/algebra/sequences-and-progressions", "Sequences and Progressions - Class 9 Maths | UKG Lab", "Study Class 9 sequence and pattern reasoning."],
+  ["/class-9/algebra/exploring-algebraic-identities", "Exploring Algebraic Identities - Class 9 Maths | UKG Lab", "Study Class 9 algebraic identities as reusable structures."],
+  ["/class-9/algebra/linear-equations-in-two-variables", "Linear Equations in Two Variables - Class 9 Maths | UKG Lab", "Study solutions and graphs of Class 9 two-variable linear equations."],
+  ["/class-9/coordinate-geometry/coordinate-geometry", "Coordinate Geometry - Class 9 Maths | UKG Lab", "Study the Cartesian plane, coordinates, quadrants and plotting points."],
+  ["/class-9/geometry/euclids-geometry-axioms-and-postulates", "Euclid's Geometry - Class 9 Maths | UKG Lab", "Study axioms, postulates and the structure of geometric reasoning."],
+  ["/class-9/geometry/lines-and-angles", "Lines and Angles - Class 9 Maths | UKG Lab", "Study angle pairs, parallel lines and transversals."],
+  ["/class-9/geometry/triangles-congruence-theorems", "Triangles Congruence Theorems - Class 9 Maths | UKG Lab", "Study Class 9 triangle congruence criteria and proof applications."],
+  ["/class-9/geometry/quadrilaterals", "Quadrilaterals - Class 9 Maths | UKG Lab", "Study Class 9 quadrilateral and parallelogram properties."],
+  ["/class-9/geometry/circles", "Circles - Class 9 Maths | UKG Lab", "Study Class 9 circle vocabulary, chords, arcs and angle reasoning."],
+  ["/class-9/mensuration/area-and-perimeter", "Area and Perimeter - Class 9 Maths | UKG Lab", "Study area and perimeter concepts for Class 9 Mensuration."],
+  ["/class-9/mensuration/surface-area-and-volume", "Surface Area and Volume - Class 9 Maths | UKG Lab", "Study Class 9 surface area and volume of prescribed solids."],
+  ["/class-9/statistics-probability/statistics", "Statistics - Class 9 Maths | UKG Lab", "Study Class 9 data organization, frequency tables and central tendency."],
+  ["/class-9/statistics-probability/introduction-to-probability", "Introduction to Probability - Class 9 Maths | UKG Lab", "Study Class 9 outcomes, events and simple probability."],
+];
+
+for (const [route, title, description] of class9FallbackRoutes) {
+  routeMetadata[route] = { title, description };
+}
+
 function escapeHtml(value) {
   return value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }

@@ -103,7 +103,7 @@ export function SearchPage() {
         </div>
         <form className="mt-8 flex max-w-2xl flex-col gap-2 sm:flex-row" onSubmit={submit} role="search">
           <label className="sr-only" htmlFor="search-input">Search mathematics content</label>
-          <input id="search-input" className="focus-ring min-h-12 min-w-0 flex-1 rounded-md border border-ink-200 bg-white px-4 dark:border-white/10 dark:bg-white/[0.04]" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="quadratic equation, trigonometry, integration" />
+          <input id="search-input" className="focus-ring min-h-12 min-w-0 flex-1 rounded-md border border-ink-200 bg-white px-4 dark:border-white/10 dark:bg-white/[0.04]" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="irrational numbers, polynomial, triangle congruence, probability" />
           <button className="focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" type="submit"><Search size={17} aria-hidden="true" /> Search</button>
         </form>
 
