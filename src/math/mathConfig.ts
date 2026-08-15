@@ -5,12 +5,13 @@ export const mathSite = {
   parentUrl: "https://ukglab.com",
   url: "https://math.ukglab.com",
   tagline: "Understand Math. Don't Memorize It.",
-  description: "Learn CBSE Mathematics through clear concepts, worked examples, practice and step-by-step problem solving.",
+  description: "Learn School and IIT JEE Mathematics through adaptive explanations, worked examples and progressive practice.",
 };
 
 export const mathNav = [
-  { label: "Learn", href: "/" },
-  { label: "Practice", href: "/class-10/real-numbers/practice" },
+  { label: "Learn", href: "/explore" },
+  { label: "Practice", href: "/class-10/algebra/quadratic-equations/practice" },
+  { label: "JEE", href: "/explore?goal=jee" },
   { label: "Classes", href: "/#classes" },
-  { label: "About", href: "/about" },
+  { label: "Progress", href: "/dashboard" },
 ];

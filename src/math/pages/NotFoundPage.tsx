@@ -13,7 +13,7 @@ export function NotFoundPage() {
         <div className="max-w-2xl">
           <p className="section-kicker">404</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">This page is not in the lesson plan.</h1>
-          <p className="mt-5 text-lg leading-8 text-ink-700 dark:text-ink-200">The route may be missing, moved, or not part of the current CBSE Classes 9-12 Math skeleton.</p>
+          <p className="mt-5 text-lg leading-8 text-ink-700 dark:text-ink-200">The route may be missing, moved, or not part of the current School and IIT JEE course map.</p>
           <Link className="focus-ring mt-8 inline-flex min-h-11 items-center rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" to="/">
             Back to Home
           </Link>

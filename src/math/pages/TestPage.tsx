@@ -4,12 +4,16 @@ import { Link, useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { MathText } from "../components/MathRender";
 import { getChapter } from "../content";
+import { useLearningPreferences } from "../learningContext";
+import { formatExam } from "../learningPreferences";
 import { updateMathSeo } from "../mathSeo";
+import { recordTestResult } from "../progress";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function TestPage() {
   const { classSlug, branchSlug, chapterSlug } = useParams();
   const found = getChapter(classSlug, chapterSlug, branchSlug);
+  const { preferences } = useLearningPreferences();
   const [started, setStarted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -31,11 +35,24 @@ export function TestPage() {
   const questions = chapter.practice;
   const correct = submitted ? questions.filter((question) => answers[question.slug] === (question.finalAnswer ?? question.answer)).length : 0;
   const attempted = Object.keys(answers).length;
+  const contextCrumb = preferences.goal === "jee" && preferences.exam
+    ? { name: formatExam(preferences.exam), path: `/jee/${preferences.exam}` }
+    : { name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` };
+
+  const submitTest = () => {
+    if (!window.confirm("Submit this chapter test?")) return;
+    const score = questions.filter((question) => answers[question.slug] === (question.finalAnswer ?? question.answer)).length;
+    const topicLesson = chapter.lessons[0];
+    const topicPath = topicLesson ? `/${mathClass.slug}/${branch.slug}/${chapter.slug}/${topicLesson.slug}` : `/${mathClass.slug}/${branch.slug}/${chapter.slug}`;
+    const topicKey = topicLesson ? `${mathClass.slug}/${branch.slug}/${chapter.slug}/${topicLesson.slug}` : `${mathClass.slug}/${branch.slug}/${chapter.slug}`;
+    recordTestResult({ topicKey, title: topicLesson?.title ?? chapter.title, path: topicPath, classLevel: mathClass.level, chapter: chapter.title, correct: score, total: questions.length });
+    setSubmitted(true);
+  };
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }, { name: "Chapter Test", path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}/test` }]} />
+        <Breadcrumbs items={[contextCrumb, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }, { name: "Chapter Test", path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}/test` }]} />
         <div className="max-w-3xl">
           <p className="section-kicker">Assessment</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">{chapter.title} - Chapter Test</h1>
@@ -105,7 +122,7 @@ export function TestPage() {
                   <span key={question.slug} className={`grid h-9 place-items-center rounded-md text-sm font-semibold ${answers[question.slug] ? "bg-signal-500/15 text-signal-800 dark:text-signal-300" : review[question.slug] ? "bg-flame-500/15 text-flame-500" : "bg-ink-100 text-ink-600 dark:bg-white/10 dark:text-ink-300"}`}>{index + 1}</span>
                 ))}
               </div>
-              <button className="focus-ring mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" type="button" onClick={() => window.confirm("Submit this chapter test?") && setSubmitted(true)}>
+              <button className="focus-ring mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-ink-950 px-4 text-sm font-semibold text-white dark:bg-white dark:text-ink-950" type="button" onClick={submitTest}>
                 Submit Test <Send size={16} aria-hidden="true" />
               </button>
             </aside>

@@ -5,6 +5,8 @@ import { Breadcrumbs } from "../components/Breadcrumbs";
 import { Diagram } from "../components/Diagram";
 import { MathBlock } from "../components/MathRender";
 import { getChapter, getLesson } from "../content";
+import { useLearningPreferences } from "../learningContext";
+import { formatExam } from "../learningPreferences";
 import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
@@ -13,6 +15,7 @@ export function ChapterPage() {
   const found = getChapter(classSlug, chapterSlug, branchSlug);
   const legacyChapter = !found && (chapterSlug === "practice" || chapterSlug === "test") ? getChapter(classSlug, branchSlug) : undefined;
   const legacyLesson = !found ? getLesson(classSlug, branchSlug, chapterSlug) : undefined;
+  const { preferences } = useLearningPreferences();
 
   useEffect(() => {
     if (found) {
@@ -36,15 +39,18 @@ export function ChapterPage() {
 
   const { mathClass, branch, chapter } = found;
   const firstLesson = chapter.lessons[0];
+  const contextCrumb = preferences.goal === "jee" && preferences.exam
+    ? { name: formatExam(preferences.exam), path: `/jee/${preferences.exam}` }
+    : { name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` };
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }]} />
+        <Breadcrumbs items={[contextCrumb, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }, { name: chapter.title, path: `/${mathClass.slug}/${branch.slug}/${chapter.slug}` }]} />
 
         <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
           <div>
-            <p className="section-kicker">{branch.name} · Chapter {chapter.order}</p>
+            <p className="section-kicker">{preferences.goal === "jee" ? `${formatExam(preferences.exam)} · ` : ""}{branch.name} · Chapter {chapter.order}</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{chapter.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">{chapter.overview}</p>
             <div className="mt-8 flex flex-wrap gap-3">

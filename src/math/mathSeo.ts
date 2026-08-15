@@ -13,7 +13,7 @@ function setMeta(selector: string, value: string) {
 }
 
 export function updateMathSeo({ title, description = mathSite.description, path = "/", image = `${mathSite.url}/og-image.svg` }: SeoInput) {
-  const resolvedTitle = title ? `${title} | Math by UKG Lab` : "CBSE Class 9-12 Maths | Math by UKG Lab";
+  const resolvedTitle = title ? `${title} | Math by UKG Lab` : "School & IIT JEE Maths | Math by UKG Lab";
   const url = new URL(path, mathSite.url).toString();
 
   document.title = resolvedTitle;

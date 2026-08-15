@@ -11,8 +11,8 @@ export function Breadcrumbs({ items }: { items: Breadcrumb[] }) {
 
   return (
     <>
-      <nav aria-label="Breadcrumb" className="mb-6 overflow-x-auto text-sm">
-        <ol className="flex min-w-max items-center gap-2 text-ink-500 dark:text-ink-400">
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-ink-500 dark:text-ink-400">
           {allItems.map((item, index) => (
             <li key={item.path} className="flex items-center gap-2">
               {index > 0 ? <span aria-hidden="true">/</span> : null}

@@ -5,7 +5,7 @@ import { updateMathSeo } from "../mathSeo";
 
 export function AboutMathPage() {
   useEffect(() => {
-    updateMathSeo({ title: "About", description: "About Math by UKG Lab, a focused CBSE Mathematics learning product for Classes 9-12.", path: "/about" });
+    updateMathSeo({ title: "About", description: "About Math by UKG Lab, an adaptive School and IIT JEE Mathematics learning product.", path: "/about" });
   }, []);
 
   return (
@@ -13,18 +13,18 @@ export function AboutMathPage() {
       <div className="section-shell">
         <div className="max-w-3xl">
           <p className="section-kicker">About</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">A focused CBSE Mathematics product.</h1>
+          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white">One mathematics platform, different learning depths.</h1>
           <p className="mt-5 text-lg leading-8 text-ink-700 dark:text-ink-200">
-            Math by UKG Lab is built for Classes 9, 10, 11 and 12 only in this phase. The product focuses on clear concepts, worked examples, practice, tests and revision without becoming a generic coaching website.
+            Math by UKG Lab supports School Mathematics for Classes 9-12 and an IIT JEE pathway. Shared concepts adapt through Simple, Medium and Hard explanations while practice difficulty remains independently controlled.
           </p>
         </div>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {[
-            ["Focused scope", "CBSE Mathematics for Classes 9-12. No other boards, classes or exams are shown in this release."],
-            ["Scalable content", "Lessons, chapters, questions, formulas and tests live in structured data instead of scattered UI components."],
+            ["Adaptive paths", "Students choose School or JEE, a course and an explanation depth without entering a duplicated content tree."],
+            ["Shared concepts", "Lessons, examples and questions live in structured data with level-specific depth attached to one core topic."],
             ["Original learning", "Sample content is original and intentionally small. Copyrighted textbook material is not copied."],
           ].map(([title, copy]) => (
-            <article key={title} className="surface-card rounded-xl p-6">
+            <article key={title} className="surface-card rounded-lg p-6">
               <h2 className="text-xl font-semibold">{title}</h2>
               <p className="mt-3 text-sm leading-6 text-ink-600 dark:text-ink-300">{copy}</p>
             </article>

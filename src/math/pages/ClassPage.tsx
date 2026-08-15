@@ -2,7 +2,9 @@ import { ArrowRight, BookOpen, Clock, Search } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
+import { LearningLevelControl } from "../components/LearningLevelControl";
 import { getBranchesForClass, getClassBySlug } from "../content";
+import { useLearningPreferences } from "../learningContext";
 import { updateMathSeo } from "../mathSeo";
 import { NotFoundPage } from "./NotFoundPage";
 
@@ -10,6 +12,7 @@ export function ClassPage() {
   const { classSlug } = useParams();
   const mathClass = getClassBySlug(classSlug);
   const branchData = getBranchesForClass(classSlug);
+  const { preferences, selectClass, setLearningLevel } = useLearningPreferences();
 
   useEffect(() => {
     if (mathClass) {
@@ -18,8 +21,9 @@ export function ClassPage() {
         description: `${mathClass.title}: chapters, concepts, practice and tests for CBSE Mathematics.`,
         path: `/${mathClass.slug}`,
       });
+      if (preferences.goal !== "school" || preferences.classLevel !== mathClass.level) selectClass(mathClass.level);
     }
-  }, [mathClass]);
+  }, [mathClass, preferences.classLevel, preferences.goal, selectClass]);
 
   if (!mathClass) return <NotFoundPage />;
 
@@ -36,9 +40,10 @@ export function ClassPage() {
             <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{mathClass.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">Learn Class {mathClass.level} Mathematics topic by topic with concepts, examples, practice questions, hints and step-by-step solutions.</p>
           </div>
-          <aside className="rounded-xl border border-ink-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">
-            <p className="text-sm font-bold uppercase tracking-[0.14em] text-signal-700 dark:text-signal-400">Guest progress</p>
-            <p className="mt-3 text-sm leading-6 text-ink-600 dark:text-ink-300">Sign-in is not part of this phase. Progress architecture is ready, and local history appears when you open lessons.</p>
+          <aside className="rounded-lg border border-ink-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-signal-700 dark:text-signal-400">Learning profile</p>
+            <div className="mt-4"><LearningLevelControl value={preferences.learningLevel} onChange={setLearningLevel} compact /></div>
+            <p className="mt-3 text-xs leading-5 text-ink-600 dark:text-ink-300">This controls explanation depth. Question difficulty is selected separately in Practice.</p>
             <Link className="focus-ring mt-5 inline-flex min-h-10 items-center gap-2 rounded-md border border-ink-200 px-3 text-sm font-semibold hover:border-signal-500 dark:border-white/10" to="/dashboard">
               Dashboard <ArrowRight size={16} aria-hidden="true" />
             </Link>

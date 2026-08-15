@@ -7,6 +7,18 @@ const origin = "https://math.ukglab.com";
 const basePath = env.VITE_BASE_PATH ?? "/";
 
 const routeMetadata = {
+  "/explore": {
+    title: "Course Explorer | Math by UKG Lab",
+    description: "Choose School or IIT JEE Mathematics, your course and your preferred explanation level.",
+  },
+  "/jee/jee-main": {
+    title: "JEE Main Mathematics | Math by UKG Lab",
+    description: "Study shared mathematics concepts at JEE Main depth with adaptive explanations and practice.",
+  },
+  "/jee/jee-advanced": {
+    title: "JEE Main + Advanced Mathematics | Math by UKG Lab",
+    description: "Study shared mathematics concepts with JEE Advanced reasoning, alternate methods and hard practice.",
+  },
   "/class-9": {
     title: "CBSE Class 9 Maths | Math by UKG Lab",
     description: "Learn CBSE Class 9 Mathematics through concepts, examples, practice and chapter structure.",
@@ -81,7 +93,7 @@ const routeMetadata = {
   },
   "/search": {
     title: "Search | Math by UKG Lab",
-    description: "Search CBSE Mathematics concepts, lessons, questions, chapters and formulas.",
+    description: "Search adaptive School and IIT JEE Mathematics concepts, questions, chapters and formulas.",
   },
   "/bookmarks": {
     title: "Bookmarks | Math by UKG Lab",
@@ -89,11 +101,11 @@ const routeMetadata = {
   },
   "/dashboard": {
     title: "Student Dashboard | Math by UKG Lab",
-    description: "Future-ready student dashboard for Math by UKG Lab.",
+    description: "View local learning preferences and action-based mathematics progress.",
   },
   "/about": {
     title: "About | Math by UKG Lab",
-    description: "About Math by UKG Lab, a focused CBSE Mathematics learning product for Classes 9-12.",
+    description: "About Math by UKG Lab, an adaptive School and IIT JEE Mathematics learning product.",
   },
 };
 

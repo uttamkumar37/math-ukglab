@@ -1,8 +1,10 @@
-import { BookOpen, ExternalLink, Menu, Search, X } from "lucide-react";
+import { BookOpen, ExternalLink, Menu, Search, UserRound, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 import { mathClasses } from "../content";
+import { useLearningPreferences } from "../learningContext";
+import { formatExam } from "../learningPreferences";
 import { mathNav, mathSite } from "../mathConfig";
 
 const brandImage = `${import.meta.env.BASE_URL}brand/math-ukg-lab.png`;
@@ -16,6 +18,12 @@ function navClass({ isActive }: { isActive: boolean }) {
 export function MathShell() {
   const [open, setOpen] = useState(false);
   const { hash, pathname } = useLocation();
+  const { preferences } = useLearningPreferences();
+  const courseLabel = preferences.goal === "jee"
+    ? formatExam(preferences.exam)
+    : preferences.goal === "school" && preferences.classLevel
+      ? `Class ${preferences.classLevel}`
+      : "Choose path";
 
   useEffect(() => {
     setOpen(false);
@@ -54,6 +62,11 @@ export function MathShell() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
+            <Link className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-md border border-ink-200 bg-white px-3 text-sm font-semibold text-ink-800 transition hover:border-signal-500 dark:border-white/10 dark:bg-white/5 dark:text-ink-100" to="/explore" aria-label={`Learning profile: ${courseLabel}, ${preferences.learningLevel} explanation level`} title="Learning profile">
+              <UserRound size={17} aria-hidden="true" />
+              <span>{courseLabel}</span>
+              <span className="text-xs capitalize text-signal-700 dark:text-signal-400">{preferences.learningLevel}</span>
+            </Link>
             <Link className="focus-ring grid h-10 w-10 place-items-center rounded-md text-ink-600 transition hover:bg-ink-100 hover:text-ink-950 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white" to="/search" aria-label="Search" title="Search">
               <Search size={19} aria-hidden="true" />
             </Link>
@@ -81,9 +94,9 @@ export function MathShell() {
             </nav>
             <div className="mt-4 flex items-center justify-between gap-3">
               <ThemeSwitcher />
-              <a className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-md border border-ink-200 px-3 text-sm font-semibold dark:border-white/10" href={mathSite.parentUrl} target="_blank" rel="noreferrer">
-                UKG Lab <ExternalLink size={15} aria-hidden="true" />
-              </a>
+              <Link className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-md border border-ink-200 px-3 text-sm font-semibold dark:border-white/10" to="/explore">
+                <UserRound size={16} aria-hidden="true" /> {courseLabel} · <span className="capitalize">{preferences.learningLevel}</span>
+              </Link>
             </div>
           </div>
         ) : null}
@@ -100,10 +113,10 @@ export function MathShell() {
               <img className="h-10 w-10 rounded-md border border-ink-200 bg-white object-cover shadow-soft dark:border-white/10" src={brandImage} alt="" />
               <div>
                 <p className="font-semibold">{mathSite.name}</p>
-                <p className="text-sm text-ink-500 dark:text-ink-400">CBSE Mathematics for Classes 9-12</p>
+                <p className="text-sm text-ink-500 dark:text-ink-400">School and IIT JEE Mathematics</p>
               </div>
             </div>
-            <p className="mt-5 max-w-md text-sm leading-6 text-ink-600 dark:text-ink-300">A UKG Lab Learning Product built for clear concepts, worked examples, practice and step-by-step problem solving.</p>
+            <p className="mt-5 max-w-md text-sm leading-6 text-ink-600 dark:text-ink-300">A UKG Lab Learning Product built for adaptive explanations, worked examples and progressive problem solving.</p>
           </div>
           <div>
             <p className="font-semibold">Classes</p>
@@ -119,6 +132,7 @@ export function MathShell() {
             <p className="font-semibold">Product</p>
             <div className="mt-4 grid gap-2">
               <Link className="link-underline w-fit text-sm text-ink-600 hover:text-signal-700 dark:text-ink-300 dark:hover:text-signal-400" to="/about">About</Link>
+              <Link className="link-underline w-fit text-sm text-ink-600 hover:text-signal-700 dark:text-ink-300 dark:hover:text-signal-400" to="/explore">Course Explorer</Link>
               <Link className="link-underline w-fit text-sm text-ink-600 hover:text-signal-700 dark:text-ink-300 dark:hover:text-signal-400" to="/formulas">Formulas</Link>
               <Link className="link-underline w-fit text-sm text-ink-600 hover:text-signal-700 dark:text-ink-300 dark:hover:text-signal-400" to="/bookmarks">Bookmarks</Link>
               <a className="link-underline inline-flex w-fit items-center gap-1 text-sm text-ink-600 hover:text-signal-700 dark:text-ink-300 dark:hover:text-signal-400" href={mathSite.parentUrl} target="_blank" rel="noreferrer">

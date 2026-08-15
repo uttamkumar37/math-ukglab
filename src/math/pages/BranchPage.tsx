@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { getBranch, getChapter } from "../content";
+import { useLearningPreferences } from "../learningContext";
+import { formatExam } from "../learningPreferences";
 import { updateMathSeo } from "../mathSeo";
 import type { MathBranch } from "../types";
 import { NotFoundPage } from "./NotFoundPage";
@@ -23,6 +25,7 @@ export function BranchPage() {
   const { classSlug, branchSlug } = useParams();
   const found = getBranch(classSlug, branchSlug);
   const legacyChapter = !found ? getChapter(classSlug, branchSlug) : undefined;
+  const { preferences } = useLearningPreferences();
 
   useEffect(() => {
     if (!found) return;
@@ -41,15 +44,18 @@ export function BranchPage() {
 
   const { mathClass, branch } = found;
   const Icon = branchIcons[branch.identity];
+  const contextCrumb = preferences.goal === "jee" && preferences.exam
+    ? { name: formatExam(preferences.exam), path: `/jee/${preferences.exam}` }
+    : { name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` };
 
   return (
     <section className="py-12 sm:py-16">
       <div className="section-shell">
-        <Breadcrumbs items={[{ name: `Class ${mathClass.level}`, path: `/${mathClass.slug}` }, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }]} />
+        <Breadcrumbs items={[contextCrumb, { name: branch.name, path: `/${mathClass.slug}/${branch.slug}` }]} />
 
         <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
           <div>
-            <p className="section-kicker">CBSE Class {mathClass.level} Mathematics</p>
+            <p className="section-kicker">{preferences.goal === "jee" ? formatExam(preferences.exam) : `CBSE Class ${mathClass.level} Mathematics`}</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ink-950 dark:text-white sm:text-5xl">{branch.name}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-200">{branch.description}</p>
           </div>
