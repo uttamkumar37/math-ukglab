@@ -1,0 +1,196 @@
+openapi: 3.0.3
+info:
+  title: Math by UKG Lab API
+  version: 0.1.0
+  description: REST API for the Math by UKG Lab modular monolith.
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development
+  - url: https://api.math.ukglab.com/api/v1
+    description: Production target
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: API is healthy
+  /classes:
+    get:
+      summary: List classes
+      responses:
+        "200":
+          description: Classes
+  /classes/{classNumber}:
+    get:
+      summary: Get one class by number
+      parameters:
+        - in: path
+          name: classNumber
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Class
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /classes/{classNumber}/units:
+    get:
+      summary: List units for a class
+      parameters:
+        - in: path
+          name: classNumber
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Units
+  /classes/{classNumber}/units/{slug}:
+    get:
+      summary: Get one unit by class and slug
+      parameters:
+        - in: path
+          name: classNumber
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Unit
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /units/{slug}:
+    get:
+      summary: Get one unit by slug
+      parameters:
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Unit
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /chapters:
+    get:
+      summary: List chapters
+      parameters:
+        - in: query
+          name: class
+          schema:
+            type: integer
+        - in: query
+          name: unit
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Chapters
+  /classes/{classNumber}/chapters/{slug}:
+    get:
+      summary: Get one chapter by class and slug
+      parameters:
+        - in: path
+          name: classNumber
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Chapter
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /chapters/{slug}:
+    get:
+      summary: Get one chapter by slug
+      parameters:
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Chapter
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /topics:
+    get:
+      summary: List topics
+      responses:
+        "200":
+          description: Topics
+  /topics/{slug}:
+    get:
+      summary: Get one topic by slug
+      parameters:
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Topic
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /lessons/{slug}:
+    get:
+      summary: Get lesson content by topic/lesson slug
+      parameters:
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Lesson
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /questions:
+    get:
+      summary: List questions
+      parameters:
+        - in: query
+          name: class
+          schema:
+            type: integer
+        - in: query
+          name: topic
+          schema:
+            type: string
+        - in: query
+          name: difficulty
+          schema:
+            type: string
+            enum: [simple, medium, hard, SIMPLE, MEDIUM, HARD]
+      responses:
+        "200":
+          description: Questions
+  /questions/{slug}:
+    get:
+      summary: Get one question with hints and solution steps
+      parameters:
+        - $ref: "#/components/parameters/Slug"
+      responses:
+        "200":
+          description: Question
+        "404":
+          $ref: "#/components/responses/NotFound"
+components:
+  parameters:
+    Slug:
+      in: path
+      name: slug
+      required: true
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
